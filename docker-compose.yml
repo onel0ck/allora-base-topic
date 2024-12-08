@@ -1,0 +1,28 @@
+services:
+  inference:
+    build: .
+    command: python -u /app/app.py
+    container_name: allora-inference
+    deploy:
+      resources:
+        limits: {}
+    env_file:
+    - .env
+    environment:
+    - RPC_URL=
+    healthcheck:
+      interval: 30s
+      retries: 10
+      start_period: 300s
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:8000/health
+      timeout: 20s
+    ports:
+    - 8000:8000
+    restart: always
+    volumes:
+    - ./inference-data:/app/data
+    - ./logs:/app/logs
